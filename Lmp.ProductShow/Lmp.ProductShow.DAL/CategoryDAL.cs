@@ -31,5 +31,8 @@ namespace Lmp.ProductShow.DAL
         //{
         //    return addCategory(new tblCategory() { parent = Convert.ToInt32(parentId), name = categoryName });
         //}
+        public int deleteCategory(int id) { 
+            //dbModel.tblCategories.Remove
+        }
     }
 }

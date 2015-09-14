@@ -1,4 +1,7 @@
-﻿@{
+﻿
+@*@model Lmp.ProductShow.AdminWebApp.Models.CategoryModel;*@
+
+@{
     ViewBag.Title = "Index";
     Layout = null;
 }
@@ -23,8 +26,16 @@
 
 <script type="text/javascript">
     $(function () {
+        $("#newCategoryDiv").css("display", "none");
+        $("#dialogCancelButton").click(function () {
+            $("#newCategoryDiv").dialog("close");
+        });
+        
+
         $("#addCategoryId").click(function () {
-            $("#newCategoryDiv").css("display", "block");
+            //$("#newCategoryDiv").dialog();
+
+            //$("#newCategoryDiv").css("display", "block");
             $("#newCategoryDiv").dialog({
                 modal: true,
                 resizable: true,
@@ -34,30 +45,11 @@
                 width: 400,
                 height: 300,
                 top: 100,
-                left: 100,
-                buttons: [{
-                    text: '确定',
-                    iconCls: 'icon-ok',
-                    handler: function (data) {
-                        if (data == "1") {
-                            refresh();
-                            // window.location.reload();//刷新当前页面
-                        } else {
-                            alert("新增失败返回：" + data);
-                        }
-                    }
-                }, {
-                    text: '取消',
-                    handler: function () {
-                        $('#newCategoryDiv').dialog('close');
-                    }
-                }]
+                left: 100                
             });
 
 
         });
-        $("#newCategoryDiv").css("display", "none");
-        ////$(".newCategoryDiv").css({ "display": "block", "z-index": "999", "position": "absolute", "left": "100px", "top": "10" })
     });
 </script>
         </head>
@@ -66,12 +58,12 @@
 <div id="tableDiv">
     <table id="tableId">
         <tr>
-            <td>id</td><td>名称</td><td>父级</td>
+            <td>id</td><td>名称</td><td>父级</td><td>删除</td>
         </tr>
         @foreach (var category in (List<tblCategory>)ViewData["categories"])
         {
             <tr>
-                <td>@category.id</td><td>@category.name</td><td>@category.parent</td>
+                <td>@category.id</td><td>@category.name</td><td>@category.parent</td><td><a href="/Category/Delete/@category.id">删除</a></td>
             </tr>
         }
        
@@ -86,20 +78,27 @@
             <tr>
                 <td>上级类目</td>
                 <td>
-<select name="parentId">
+                    @*@Html.ListBoxFor(m=>m.parent)*@
+<select name="parent">
     @foreach (var category in (List<tblCategory>)ViewData["category1"])
     {
         <option value="@category.id">@category.name</option>
     }
-</select></td>
+</select>
+
+                </td>
             </tr>
             <tr>
                 <td>新增类目名称</td>
                 <td>
-                    <input type="text" id="newCategoryNameId" name="categoryname" /></td>
+                    <input type="text" id="newCategoryNameId" name="name" />
+                    @*@Html.TextBoxFor(m=>m.name)*@
+                </td>
             </tr>
 
         </table>
+        <input type="submit" id="dialogOKButton" value="OK"/>
+        <input type="button" id="dialogCancelButton" value="Cancel" />
     </form>
 
 

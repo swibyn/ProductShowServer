@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Lmp.ProductShow.BLL;
 using Lmp.ProductShow.Model;
+using Lmp.ProductShow.AdminWebApp.Filters;
+using Lmp.ProductShow.AdminWebApp.Models;
 
 namespace Lmp.ProductShow.AdminWebApp.Controllers
 {
@@ -19,24 +21,31 @@ namespace Lmp.ProductShow.AdminWebApp.Controllers
             ViewData["category1"] = new CategoryBLL().getCategories1();
             return View();
         }
-        public ActionResult AddCategory(tblCategory category)
+        public ActionResult AddCategory(CategoryModel model)
         {
-            var effectedRow = new CategoryBLL().addCategory(category);
+            var effectedRow = new CategoryBLL().addCategory(model.totblCategory());
             return Content("" + effectedRow);
         }
-        //public ActionResult Add(string parentId, string categoryname)
-        //{
-        //   var category = new CategoryBLL().addCategory(parentId, categoryname);
-        //   if (category != null)
-        //   {
-        //       return Content("OK");
-        //   }
-        //   else
-        //   {
-        //       return Content("类目新增失败");
-        //   }
+        public ActionResult Add(long? parent, string name)
+        {
+            var category = new tblCategory();
+            category.parent = parent;
+            category.name = name;
+            int effected = new CategoryBLL().addCategory(category);
+            if (effected == 1)
+            {
+                return Content("OK");
+            }
+            else
+            {
+                return Content("类目新增失败");
+            }
 
-        //}
+        }
+        public ActionResult Delete(int id)
+        {
+ 
+        }
 
     }
 }
