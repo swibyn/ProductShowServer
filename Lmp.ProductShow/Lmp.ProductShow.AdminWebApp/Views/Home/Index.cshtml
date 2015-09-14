@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@using Lmp.ProductShow.Model
+
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+            </p>
+        </div>
+    </section>
+}
+<h3>We suggest the following:</h3>
+<div>
+</div>
+
+<ol class="round">
+    <li>
+        <a href="/Admin/Index">用户管理</a>
+    </li>
+    <li>
+        <a href="/Category/Index">类目管理</a>
+    </li>
+    <li>
+        <a href="/Product/Index">产品管理</a>
+    </li>
+    
+
+</ol>
