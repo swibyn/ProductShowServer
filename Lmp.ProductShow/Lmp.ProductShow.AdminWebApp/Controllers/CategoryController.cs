@@ -44,7 +44,18 @@ namespace Lmp.ProductShow.AdminWebApp.Controllers
         }
         public ActionResult Delete(int id)
         {
- 
+            var effectedRow = new CategoryBLL().deleteCategory(id);
+            return Content("" + effectedRow); 
+        }
+
+        public ActionResult Update(int id, int parent, string name)
+        {
+            var category = new tblCategory();
+            category.id = id;
+            category.parent = parent;
+            category.name = name;
+
+            var effectedRow = new CategoryBLL().
         }
 
     }

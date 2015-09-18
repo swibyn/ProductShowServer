@@ -27,12 +27,20 @@ namespace Lmp.ProductShow.DAL
             return dbModel.SaveChanges();
         }
 
-        //public tblCategory addCategory(string parentId, string categoryName)
-        //{
-        //    return addCategory(new tblCategory() { parent = Convert.ToInt32(parentId), name = categoryName });
-        //}
-        public int deleteCategory(int id) { 
-            //dbModel.tblCategories.Remove
+        public int deleteCategory(tblCategory category)
+        {
+            dbModel.tblCategories.Remove(category);
+            return dbModel.SaveChanges();
+        }
+        public int deleteCategory(int id) {
+            var category = dbModel.tblCategories.FirstOrDefault(o => o.id == id);
+            return deleteCategory(category);
+        }
+
+        public tblCategory UpdateCategory(tblCategory category)
+        {
+            //dbModel.tblCategories.u
+            return null;
         }
     }
 }

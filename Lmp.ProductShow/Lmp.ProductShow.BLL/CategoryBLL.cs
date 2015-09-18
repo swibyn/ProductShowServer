@@ -26,6 +26,15 @@ namespace Lmp.ProductShow.BLL
             return categoryDAL.addCategory(category);
         }
 
+        public int deleteCategory(tblCategory category)
+        {
+            return categoryDAL.deleteCategory(category);
+        }
+
+        public int deleteCategory(int id)
+        {
+            return categoryDAL.deleteCategory(id);
+        }
 
     }
 }

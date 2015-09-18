@@ -27,8 +27,39 @@
 <script type="text/javascript">
     $(function () {
         $("#newCategoryDiv").css("display", "none");
+        $("#updateCategoryDiv").css("display", "none");
         $("#dialogCancelButton").click(function () {
             $("#newCategoryDiv").dialog("close");
+        });
+        $("#updateDialogCancelButton").click(function () {
+            $("#updateCategoryDiv").dialog("close");
+        });
+        $(".deleteCategory").click(function () {
+            var id = $(this).attr("categoryid");
+            var b = confirm("确定要删除 id=" + id + "记录吗？");
+            if (b){
+                $.ajax({
+                    type:"post",
+                    url:"/Category/Delete",
+                    data:{"id":id},
+                    success: function (data) {
+                        if (data == "OK") {
+                            alert("提示", "删除成功", "info");
+                            $(this).parent().parent().remove();
+                        } else {
+                            alert("提示", "删除失败", "info");
+                        }
+                    }
+                });
+            }
+
+            //return jQuery.ajax({
+            //    type: method,
+            //    url: url,
+            //    data: data,
+            //    success: callback,
+            //    dataType: type
+            //});
         });
         
 
@@ -51,6 +82,24 @@
 
         });
     });
+
+    function updateCategory(id, parent, name) {
+        $("#updataCategoryIdId").val(id);
+        $("#updatedCategoryNameId").val(name);
+        $("#updateCategoryDiv").dialog({
+            modal: true,
+            resizable: true,
+            maximizable: true,
+            collapsible: true,
+            title: "修改类目",
+            width: 400,
+            height: 300,
+            top: 100,
+            left: 100
+        });
+        
+        
+    }
 </script>
         </head>
     <body>
@@ -58,18 +107,22 @@
 <div id="tableDiv">
     <table id="tableId">
         <tr>
-            <td>id</td><td>名称</td><td>父级</td><td>删除</td>
+            <td>id</td><td>名称</td><td>父级</td><td>父级id</td><td>删除/修改</td>
         </tr>
         @foreach (var category in (List<tblCategory>)ViewData["categories"])
         {
             <tr>
-                <td>@category.id</td><td>@category.name</td><td>@category.parent</td><td><a href="/Category/Delete/@category.id">删除</a></td>
+                <td>@category.id</td><td>@category.name</td><td></td><td>@category.parent</td>
+                <td><a href="javascript:void(0)" class="deleteCategory" categoryid=@category.id>删除</a>&nbsp;
+                    <a href="javascript:void(0)" class="updateCategory" categoryid=@category.id categoryname=@category.name categoryparent=@category.parent>修改</a></td>
             </tr>
         }
        
 
     </table>
+    <div>
         <button type="button" id="addCategoryId">新增</button>
+    </div>
 </div>
 
 <div id="newCategoryDiv">
@@ -89,7 +142,7 @@
                 </td>
             </tr>
             <tr>
-                <td>新增类目名称</td>
+                <td>类目名称</td>
                 <td>
                     <input type="text" id="newCategoryNameId" name="name" />
                     @*@Html.TextBoxFor(m=>m.name)*@
@@ -97,8 +150,48 @@
             </tr>
 
         </table>
+        <br/>
+        <p>
         <input type="submit" id="dialogOKButton" value="OK"/>
         <input type="button" id="dialogCancelButton" value="Cancel" />
+            </p>
+    </form>
+
+
+</div>
+
+        
+<div id="updateCategoryDiv">
+    <form action="/Category/update">
+        <input type="hidden" name="id" id="updataCategoryIdId" />
+        <table>
+            <tr>
+                <td>上级类目</td>
+                <td>
+                    @*@Html.ListBoxFor(m=>m.parent)*@
+<select name="parent">
+    @foreach (var category in (List<tblCategory>)ViewData["category1"])
+    {
+        <option value="@category.id">@category.name</option>
+    }
+</select>
+
+                </td>
+            </tr>
+            <tr>
+                <td>类目名称</td>
+                <td>
+                    <input type="text" id="updatedCategoryNameId" name="name" />
+                    @*@Html.TextBoxFor(m=>m.name)*@
+                </td>
+            </tr>
+
+        </table>
+        <br/>
+        <p>
+        <input type="submit" id="updateDialogOKButton" value="OK"/>
+        <input type="button" id="updateDialogCancelButton" value="Cancel" />
+            </p>
     </form>
 
 
