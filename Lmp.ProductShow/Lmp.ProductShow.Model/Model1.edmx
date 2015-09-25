@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ProductShowModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ProductShowModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="ProductShowModelStoreContainer">
           <EntitySet Name="tblAdmin" EntityType="ProductShowModel.Store.tblAdmin" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="tblCategory" EntityType="ProductShowModel.Store.tblCategory" store:Type="Tables" Schema="dbo" />
@@ -24,7 +24,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="nchar" MaxLength="20" />
+          <Property Name="name" Type="varchar" MaxLength="100" />
           <Property Name="parent" Type="bigint" />
         </EntityType>
         <EntityType Name="tblProduct">
@@ -45,22 +45,31 @@
           <Property Name="age" Type="int" />
           <Property Name="nickname" Type="nchar" MaxLength="10" />
         </EntityType>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ProductShowModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="ProductShowEntities" p1:LazyLoadingEnabled="true">
-          <EntitySet Name="tblCategories" EntityType="ProductShowModel.tblCategory" />
-          <EntitySet Name="tblProducts" EntityType="ProductShowModel.tblProduct" />
-          <EntitySet Name="tblUsers" EntityType="ProductShowModel.tblUser" />
-          <EntitySet Name="tblAdmins" EntityType="ProductShowModel.tblAdmin" />
+        <EntityContainer Name="Entities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="tblAdmin" EntityType="ProductShowModel.tblAdmin" />
+          <EntitySet Name="tblCategory" EntityType="ProductShowModel.tblCategory" />
+          <EntitySet Name="tblProduct" EntityType="ProductShowModel.tblProduct" />
+          <EntitySet Name="tblUser" EntityType="ProductShowModel.tblUser" />
         </EntityContainer>
+        <EntityType Name="tblAdmin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+          <Property Name="password" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+        </EntityType>
         <EntityType Name="tblCategory">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="20" Unicode="true" FixedLength="true" />
+          <Property Name="name" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="parent" Type="Int64" />
         </EntityType>
         <EntityType Name="tblProduct">
@@ -81,21 +90,22 @@
           <Property Name="age" Type="Int32" />
           <Property Name="nickname" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
         </EntityType>
-        <EntityType Name="tblAdmin">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Type="Int64" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="username" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Type="String" Name="password" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ProductShowModelStoreContainer" CdmEntityContainer="ProductShowEntities">
-          <EntitySetMapping Name="tblCategories">
+        <EntityContainerMapping StorageEntityContainer="ProductShowModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="tblAdmin">
+            <EntityTypeMapping TypeName="ProductShowModel.tblAdmin">
+              <MappingFragment StoreEntitySet="tblAdmin">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCategory">
             <EntityTypeMapping TypeName="ProductShowModel.tblCategory">
               <MappingFragment StoreEntitySet="tblCategory">
                 <ScalarProperty Name="id" ColumnName="id" />
@@ -104,7 +114,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblProducts">
+          <EntitySetMapping Name="tblProduct">
             <EntityTypeMapping TypeName="ProductShowModel.tblProduct">
               <MappingFragment StoreEntitySet="tblProduct">
                 <ScalarProperty Name="id" ColumnName="id" />
@@ -113,7 +123,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblUsers">
+          <EntitySetMapping Name="tblUser">
             <EntityTypeMapping TypeName="ProductShowModel.tblUser">
               <MappingFragment StoreEntitySet="tblUser">
                 <ScalarProperty Name="id" ColumnName="id" />
@@ -121,15 +131,6 @@
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="age" ColumnName="age" />
                 <ScalarProperty Name="nickname" ColumnName="nickname" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblAdmins">
-            <EntityTypeMapping TypeName="ProductShowModel.tblAdmin">
-              <MappingFragment StoreEntitySet="tblAdmin">
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="username" ColumnName="username" />
-                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -147,7 +148,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

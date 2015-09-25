@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "Index";
+  
+}
+
+@using Lmp.ProductShow.Model
+
+<h2>Index</h2>
+
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+
+<script>
+    $(function () {
+        $(".category2").click(function () {
+            var categoryid = $(this).attr("categoryid");
+            $("#mainFrameid").attr("src", "/Product/Products/" + categoryid);
+        });
+
+        $("#newProductDivId").css("display", "none");
+        $("#newProductButtonId").click(function () {
+            $("#newProductDivId").css("display", "block");
+            $("#newProductDivId").dialog({
+                modal: true,
+                resizable: true,
+                maximizable: true,
+                collapsible: true,
+                title: "新增产品",
+                width: 400,
+                height: 300,
+                top: 100,
+                left: 100
+            });
+        });
+    })
+</script>
+<style type="text/css">
+    div#categoryDisplayDiv {
+        background-color: #ffff99;
+        height: auto;
+        width: 30%;
+        float: left;
+    }
+
+    div#productsDisplayDiv {
+        background-color: #EEEEEE;
+        height: auto;
+        width: 70%;
+        float: left;
+    }
+
+    iframe {
+        height: auto;
+        width: auto;
+    }
+</style>
+<div id="categoryDisplayDiv">
+
+    <ol>
+        @foreach (var categoryModel in (List<CategoryModel>)ViewData["category1Model"])
+        {
+            <li>@categoryModel.name
+                <ol>
+                    @foreach (var categoryModel2 in categoryModel.children)
+                    {
+                        <li>
+                            <a href="javascript:void(0)" class="category2" categoryid=@categoryModel2.id>@categoryModel2.name</a>
+                        </li>
+                    }
+                </ol>
+            </li>
+        }
+    </ol>
+
+
+</div>
+<div id="productsDisplayDiv">
+
+    <button id="newProductButtonId">新增</button>
+    <iframe id="mainFrameid"></iframe>
+
+</div>
+
+<div id="newProductDivId">
+    <input type="hidden" id="newProductCategoryIdId" />
+    <table>
+        <tr><td>类目</td><td id="newProductCategoryNameId"></td></tr>
+        <tr><td>产品名称</td><td><input type="text" name="newProductName" /></td></tr>
+    </table>
+    <input type="button" id="newProductOKButtonId" value="新增" />
+    <input type="button" id="newProductCancleButtonId" value="取消" />
+</div>

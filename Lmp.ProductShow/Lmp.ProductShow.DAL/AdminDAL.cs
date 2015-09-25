@@ -9,29 +9,36 @@ namespace Lmp.ProductShow.DAL
 {
     public class AdminDAL
     {
-        ProductShowEntities dbModel = new ProductShowEntities();
+        private Entities dbModel
+        {
+            get
+            {
+                return DBModel.entities;
+            }
+        }
+
         public List<tblAdmin> getAllAdmins()
         {
-            return dbModel.tblAdmins.ToList();
+            return dbModel.tblAdmin.ToList();
         }
 
         public int addAdmin(tblAdmin admin) {
-           tblAdmin mAdmin = dbModel.tblAdmins.Add(admin);
+            tblAdmin mAdmin = dbModel.tblAdmin.Add(admin);
            int effectedRow = dbModel.SaveChanges();
            return effectedRow;
         }
 
         public tblAdmin getAdmin(string userName) {
-            return dbModel.tblAdmins.FirstOrDefault(o => o.username == userName);
+            return dbModel.tblAdmin.FirstOrDefault(o => o.username == userName);
         }
 
         public tblAdmin getAdmin(int id)
         {
-            return dbModel.tblAdmins.FirstOrDefault(o => o.id == id);
+            return dbModel.tblAdmin.FirstOrDefault(o => o.id == id);
         }
 
-        public int deleteAdmin(int id) { 
-            dbModel.tblAdmins.Remove(getAdmin(id));
+        public int deleteAdmin(int id) {
+            dbModel.tblAdmin.Remove(getAdmin(id));
             return dbModel.SaveChanges();
         }
 

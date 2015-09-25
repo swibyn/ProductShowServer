@@ -13,10 +13,10 @@ namespace Lmp.ProductShow.Model
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ProductShowEntities : DbContext
+    public partial class Entities : DbContext
     {
-        public ProductShowEntities()
-            : base("name=ProductShowEntities")
+        public Entities()
+            : base("name=Entities")
         {
         }
     
@@ -25,9 +25,9 @@ namespace Lmp.ProductShow.Model
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<tblCategory> tblCategories { get; set; }
-        public DbSet<tblProduct> tblProducts { get; set; }
-        public DbSet<tblUser> tblUsers { get; set; }
-        public DbSet<tblAdmin> tblAdmins { get; set; }
+        public DbSet<tblAdmin> tblAdmin { get; set; }
+        public DbSet<tblCategory> tblCategory { get; set; }
+        public DbSet<tblProduct> tblProduct { get; set; }
+        public DbSet<tblUser> tblUser { get; set; }
     }
 }

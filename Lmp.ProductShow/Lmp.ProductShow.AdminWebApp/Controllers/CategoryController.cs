@@ -17,31 +17,28 @@ namespace Lmp.ProductShow.AdminWebApp.Controllers
 
         public ActionResult Index()
         {
-            ViewData["categories"] = new CategoryBLL().getAllCategories();
-            ViewData["category1"] = new CategoryBLL().getCategories1();
-            return View();
+            var categoryBLL = new CategoryBLL();
+            //ViewData["categories"] = categoryBLL.getAllCategories();
+            //ViewData["category1"] = categoryBLL.getCategories1();
+            ViewData["category1Model"] = categoryBLL.getCategoryModel();
+            return View("Index");
         }
-        public ActionResult AddCategory(CategoryModel model)
-        {
-            var effectedRow = new CategoryBLL().addCategory(model.totblCategory());
-            return Content("" + effectedRow);
-        }
+
+        //public ActionResult AddCategory(CategoryModel model)
+        //{
+        //    var effectedRow = new CategoryBLL().addCategory(model.totblCategory());
+        //    return Content("" + effectedRow);
+        //}
+        
         public ActionResult Add(long? parent, string name)
         {
             var category = new tblCategory();
             category.parent = parent;
             category.name = name;
             int effected = new CategoryBLL().addCategory(category);
-            if (effected == 1)
-            {
-                return Content("OK");
-            }
-            else
-            {
-                return Content("类目新增失败");
-            }
-
+            return Content("" + effected);
         }
+
         public ActionResult Delete(int id)
         {
             var effectedRow = new CategoryBLL().deleteCategory(id);
@@ -55,7 +52,8 @@ namespace Lmp.ProductShow.AdminWebApp.Controllers
             category.parent = parent;
             category.name = name;
 
-            var effectedRow = new CategoryBLL().
+            var effectedRow = new CategoryBLL().UpdateCategory(category);
+            return Content("" + effectedRow);
         }
 
     }

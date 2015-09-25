@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Products";
+    Layout = null;
+}
+
+@using Lmp.ProductShow.Model
+<html>
+<head>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".deleteProduct").click(function () {
+                var productid = $(this).attr("productid");
+                var deleteControl = $(this);
+                $.ajax({
+                    type: "post",
+                    url: "/Product/Delete",
+                    data: { "id": productid },
+                    success: function (data) {
+                        if (data == "1") {
+                            alert("删除成功！");
+                            $(deleteControl).parent().parent().remove();
+                        } else {
+                            alert("删除失败！");
+                        }
+                    }
+                })
+            })
+        });
+    </script>
+</head>
+<body>
+    <style type="text/css">        
+        table, tr, td {
+            border: 1px solid;
+        }
+    </style>
+    <div>
+        <table>
+                <tr>
+                    <td>id
+                    </td>
+                    <td>名称</td>
+                    <td>删除</td>
+                </tr>
+            @foreach (var product in (List<tblProduct>)ViewData["Products"])
+            {
+                <tr>
+                    <td>@product.id</td>
+                    <td>@product.name</td>
+                    <td><a href="javascript:void(0)" class="deleteProduct" productid=@product.id>删除</a></td>
+                </tr>
+        }
+        </table>
+    </div>
+
+</body>
+</html>

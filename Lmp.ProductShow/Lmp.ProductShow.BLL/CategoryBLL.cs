@@ -13,7 +13,27 @@ namespace Lmp.ProductShow.BLL
         CategoryDAL categoryDAL = new CategoryDAL();
         public List<tblCategory> getAllCategories()
         {
-            return categoryDAL.getAllCategories().ToList();
+            return categoryDAL.getAllCategories();
+        }
+
+
+        public List<CategoryModel> getCategoryModel()
+        {
+            var list = getAllCategories();
+            
+            var models=list.ConvertAll<CategoryModel>(o=>new CategoryModel(){
+                id=o.id,
+                name=o.name,
+                parent=o.parent ?? 0, 
+                children=new List<CategoryModel>()
+            });
+
+            var category1Model = models.FindAll(o=>o.parent == 0);
+            models.RemoveAll(o=>o.parent == 0);
+            foreach(var model in models){
+                category1Model.Find(o=>o.id == model.parent).children.Add(model);
+            }
+            return category1Model;
         }
 
         public List<tblCategory> getCategories1()
@@ -36,5 +56,10 @@ namespace Lmp.ProductShow.BLL
             return categoryDAL.deleteCategory(id);
         }
 
+        public int UpdateCategory(tblCategory category)
+        {
+            return categoryDAL.UpdateCategory(category);
+        }
     }
+    
 }

@@ -9,18 +9,18 @@ using Lmp.ProductShow.Model;
 
 namespace Lmp.ProductShow.AdminWebApp.Models
 {
-    public class CategoryModel
-    {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public long id { get; set; }
-        public string name { get; set; }
-        public Nullable<long> parent { get; set; }
+    //public class CategoryModel
+    //{
+    //    [Key]
+    //    [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+    //    public long id { get; set; }
+    //    public string name { get; set; }
+    //    public Nullable<long> parent { get; set; }
 
-        public tblCategory totblCategory()
-        {
-            return new tblCategory() { id = this.id, name = this.name, parent = this.parent };
-        }
-    }
+    //    public tblCategory totblCategory()
+    //    {
+    //        return new tblCategory() { id = this.id, name = this.name, parent = this.parent };
+    //    }
+    //}
 
 }

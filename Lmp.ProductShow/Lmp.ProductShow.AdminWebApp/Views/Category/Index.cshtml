@@ -1,5 +1,4 @@
-﻿
-@*@model Lmp.ProductShow.AdminWebApp.Models.CategoryModel;*@
+﻿@*@model Lmp.ProductShow.AdminWebApp.Models.CategoryModel;*@
 
 @{
     ViewBag.Title = "Index";
@@ -9,192 +8,277 @@
 @using Lmp.ProductShow.Model;
 
 <html>
-    <head>
-        <script src="~/Scripts/jquery-1.8.2.min.js"></script>
-        <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
-        <script src="~/Scripts/jquery.validate.min.js"></script>
-        <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
-        <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<head>
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
 
-<style type="text/css">
-    
-  table,th,td { border: 1px solid;}
-</style>
-        
+    <style type="text/css">
+        table, th, td {
+            border: 1px solid;
+        }
+    </style>
 
 
 
-<script type="text/javascript">
-    $(function () {
-        $("#newCategoryDiv").css("display", "none");
-        $("#updateCategoryDiv").css("display", "none");
-        $("#dialogCancelButton").click(function () {
-            $("#newCategoryDiv").dialog("close");
-        });
-        $("#updateDialogCancelButton").click(function () {
-            $("#updateCategoryDiv").dialog("close");
-        });
-        $(".deleteCategory").click(function () {
-            var id = $(this).attr("categoryid");
-            var b = confirm("确定要删除 id=" + id + "记录吗？");
-            if (b){
-                $.ajax({
-                    type:"post",
-                    url:"/Category/Delete",
-                    data:{"id":id},
-                    success: function (data) {
-                        if (data == "OK") {
-                            alert("提示", "删除成功", "info");
-                            $(this).parent().parent().remove();
-                        } else {
-                            alert("提示", "删除失败", "info");
+
+    <script type="text/javascript">
+        $(function () {
+            $("#newCategoryDiv").css("display", "none");
+            $("#updateCategoryDiv").css("display", "none");
+
+            $(".deleteCategory").click(function () {
+                deleteCategory($(this));
+            });
+            $(".updateCategory").click(function () {
+                updateCategory($(this));
+            });
+            $("#newCategoryButtonId").click(function () {
+                showNewCategoryDialog();
+            });
+
+            function deleteCategory(control) {
+                var id = control.attr("categoryid");
+                var b = confirm("确定要删除 id=" + id + "记录吗？");
+                if (b) {
+                    $.ajax({
+                        type: "post",
+                        url: "/Category/Delete",
+                        data: { "id": id },
+                        success: function (data) {
+                            if (data == "1") {
+                                alert("提示-删除成功", "info");
+                                $(control).parent().remove();
+                                //window.location.reload();
+                            } else {
+                                alert("提示-删除失败", "info");
+                            }
                         }
+                    });
+                }
+            }
+
+            function updateCategory(control) {
+                var id = control.attr("categoryid");
+                var parent = control.attr("categoryparent");
+                var name = control.attr("categoryname");
+
+                $("#updatedCategoryIdId").val(id);
+                $("#updatedCategoryNameId").val(name);
+                $("#updatedCategoryParentId").val(parent);
+
+                $("#updatedDialogCancelButton").click(function () {
+                    $("#updateCategoryDiv").dialog("close");
+                });
+
+                $("#updatedDialogOKButton").click(function () {
+                    //control = $(this);
+                    var id = $("#updatedCategoryIdId").val();
+                    var b = confirm("确定要修改 id=" + id + "记录吗？");
+                    if (b) {
+                        $.ajax({
+                            type: "post",
+                            url: "/Category/Update",
+                            data: {
+                                "id": $("#updatedCategoryIdId").val(),
+                                "name": $("#updatedCategoryNameId").val(),
+                                "parent": $("#updatedCategoryParentId").val()
+                            },
+                            success: function (data) {
+                                if (data == "1") {
+                                    alert("提示-修改成功", "info");
+                                    window.location.reload();
+                                } else {
+                                    alert("提示-修改失败", "info");
+                                }
+                            }
+                        });
                     }
+
+                    //$("#updateCategoryFormId").submit();
+                });
+
+                $("#updateCategoryDiv").dialog({
+                    modal: true,
+                    resizable: true,
+                    maximizable: true,
+                    collapsible: true,
+                    title: "修改类目",
+                    width: 400,
+                    height: 300,
+                    top: 100,
+                    left: 100
                 });
             }
 
-            //return jQuery.ajax({
-            //    type: method,
-            //    url: url,
-            //    data: data,
-            //    success: callback,
-            //    dataType: type
-            //});
+            function showNewCategoryDialog() {
+                $("#newDialogCancelButton").click(function () {
+                    $("#newCategoryDiv").dialog("close");
+                });
+
+                $("#newDialogOKButton").click(function () {
+                    //$("#newCategoryFormId").submit();
+                   // control = $(this);
+                    //var id = control.attr("newCategoryId");
+                    //var b = confirm("确定要修改 id=" + id + "记录吗？");
+                    //if (b) {
+                        $.ajax({
+                            type: "post",
+                            url: "/Category/Add",
+                            data: {
+                                //"id": $("#updataCategoryIdId").val(),
+                                "name": $("#newCategoryNameId").val(),
+                                "parent": $("#newCategoryParentId").val()
+                            },
+                            success: function (data) {
+                                if (data == "1") {
+                                    alert("提示-添加成功", "info");
+                                    window.location.reload();
+                                } else {
+                                    alert("提示-添加失败", "info");
+                                }
+                            }
+                        });
+                    //}
+                });
+
+                $("#newCategoryDiv").dialog({
+                    modal: true,
+                    resizable: true,
+                    maximizable: true,
+                    collapsible: true,
+                    title: "新增类目",
+                    width: 400,
+                    height: 300,
+                    top: 100,
+                    left: 100
+                });
+            }
         });
-        
-
-        $("#addCategoryId").click(function () {
-            //$("#newCategoryDiv").dialog();
-
-            //$("#newCategoryDiv").css("display", "block");
-            $("#newCategoryDiv").dialog({
-                modal: true,
-                resizable: true,
-                maximizable: true,
-                collapsible: true,
-                title: "新增类目",
-                width: 400,
-                height: 300,
-                top: 100,
-                left: 100                
-            });
-
-
-        });
-    });
-
-    function updateCategory(id, parent, name) {
-        $("#updataCategoryIdId").val(id);
-        $("#updatedCategoryNameId").val(name);
-        $("#updateCategoryDiv").dialog({
-            modal: true,
-            resizable: true,
-            maximizable: true,
-            collapsible: true,
-            title: "修改类目",
-            width: 400,
-            height: 300,
-            top: 100,
-            left: 100
-        });
-        
-        
-    }
-</script>
-        </head>
-    <body>
-<h2>类目列表</h2>
-<div id="tableDiv">
-    <table id="tableId">
-        <tr>
-            <td>id</td><td>名称</td><td>父级</td><td>父级id</td><td>删除/修改</td>
-        </tr>
-        @foreach (var category in (List<tblCategory>)ViewData["categories"])
-        {
+    </script>
+</head>
+<body>
+    <h2>类目列表</h2>
+    <div id="tableDiv">
+        @*<table id="tableId">
             <tr>
-                <td>@category.id</td><td>@category.name</td><td></td><td>@category.parent</td>
-                <td><a href="javascript:void(0)" class="deleteCategory" categoryid=@category.id>删除</a>&nbsp;
-                    <a href="javascript:void(0)" class="updateCategory" categoryid=@category.id categoryname=@category.name categoryparent=@category.parent>修改</a></td>
+                <td>id</td>
+                <td>名称</td>
+                <td>父级</td>
+                <td>父级id</td>
+                <td>删除/修改</td>
             </tr>
-        }
-       
+            @foreach (var category in (List<tblCategory>)ViewData["categories"])
+            {
+                <tr>
+                    <td>@category.id</td>
+                    <td>@category.name</td>
+                    <td></td>
+                    <td>@category.parent</td>
+                    <td><a href="javascript:void(0)" class="deleteCategory" categoryid=@category.id>删除</a>&nbsp;
+                    <a href="javascript:void(0)" class="updateCategory" categoryid=@category.id categoryname=@category.name categoryparent=@category.parent>修改</a>
 
-    </table>
-    <div>
-        <button type="button" id="addCategoryId">新增</button>
+                    </td>
+                </tr>
+            }
+
+
+        </table>*@
+        <div>
+            <button type="button" id="newCategoryButtonId">新增</button>
+        </div>
     </div>
-</div>
 
-<div id="newCategoryDiv">
-    <form action="/Category/Add">
-        <table>
-            <tr>
-                <td>上级类目</td>
-                <td>
-                    @*@Html.ListBoxFor(m=>m.parent)*@
-<select name="parent">
-    @foreach (var category in (List<tblCategory>)ViewData["category1"])
-    {
-        <option value="@category.id">@category.name</option>
-    }
-</select>
+    <div id="newCategoryDiv">
+        <form id="newCategoryFormId">
+            <table>
+                <tr>
+                    <td>上级类目</td>
+                    <td>
+                        @*@Html.ListBoxFor(m=>m.parent)*@
+                        <select id="newCategoryParentId" name="parent">
+                                <option value="0"></option>
+                            @foreach (var category in (List<CategoryModel>)ViewData["category1Model"])
+                            {
+                                <option value="@category.id">@category.name</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>类目名称</td>
+                    <td>
+                        <input type="text" id="newCategoryNameId" name="name" />
+                        @*@Html.TextBoxFor(m=>m.name)*@
+                    </td>
+                </tr>
 
-                </td>
-            </tr>
-            <tr>
-                <td>类目名称</td>
-                <td>
-                    <input type="text" id="newCategoryNameId" name="name" />
-                    @*@Html.TextBoxFor(m=>m.name)*@
-                </td>
-            </tr>
-
-        </table>
-        <br/>
-        <p>
-        <input type="submit" id="dialogOKButton" value="OK"/>
-        <input type="button" id="dialogCancelButton" value="Cancel" />
+            </table>
+            <br />
+            <p>
+                <input type="button" id="newDialogOKButton" value="OK" />
+                <input type="button" id="newDialogCancelButton" value="Cancel" />
             </p>
-    </form>
+        </form>
+    </div>
+    <div id="displayDiv">
+        <ol>
+   @foreach (var categoryModel in (List<CategoryModel>)ViewData["category1Model"])
+   {
+       <li>@categoryModel.name &nbsp;&nbsp;&nbsp; <a href="javascript:void(0)" class="deleteCategory" categoryid=@categoryModel.id>删除</a>&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" class="updateCategory" categoryid=@categoryModel.id categoryname="@categoryModel.name" categoryparent=@categoryModel.parent>修改</a>
 
 
-</div>
+           <ol>
+               @foreach (var categoryModel2 in categoryModel.children)
+               {
+                   <li>
+                       @categoryModel2.name
+                       &nbsp;&nbsp;&nbsp; <a href="javascript:void(0)" class="deleteCategory" categoryid=@categoryModel2.id>删除</a>&nbsp;&nbsp;&nbsp;
+                    <a href="javascript:void(0)" class="updateCategory" categoryid=@categoryModel2.id categoryname="@categoryModel2.name" categoryparent=@categoryModel2.parent>修改</a>
 
-        
-<div id="updateCategoryDiv">
-    <form action="/Category/update">
-        <input type="hidden" name="id" id="updataCategoryIdId" />
-        <table>
-            <tr>
-                <td>上级类目</td>
-                <td>
-                    @*@Html.ListBoxFor(m=>m.parent)*@
-<select name="parent">
-    @foreach (var category in (List<tblCategory>)ViewData["category1"])
-    {
-        <option value="@category.id">@category.name</option>
-    }
-</select>
+                   </li>
+               }
+           </ol>
+       </li>
+   }
+        </ol>
+    </div>
+    <div id="updateCategoryDiv">
+        <form id="updatedCategoryFormId">
+            <input type="hidden" name="id" id="updatedCategoryIdId" />
+            <table>
+                <tr>
+                    <td>上级类目</td>
+                    <td>
+                        @*@Html.ListBoxFor(m=>m.parent)*@
+                        <select id="updatedCategoryParentId" name="parent">
+                                <option value="0"></option>
+                            @foreach (var category in (List<CategoryModel>)ViewData["category1Model"])
+                            {
+                                <option value="@category.id">@category.name</option>
+                            }
+                        </select>
 
-                </td>
-            </tr>
-            <tr>
-                <td>类目名称</td>
-                <td>
-                    <input type="text" id="updatedCategoryNameId" name="name" />
-                    @*@Html.TextBoxFor(m=>m.name)*@
-                </td>
-            </tr>
+                    </td>
+                </tr>
+                <tr>
+                    <td>类目名称</td>
+                    <td>
+                        <input type="text" id="updatedCategoryNameId" name="name" />
+                        @*@Html.TextBoxFor(m=>m.name)*@
+                    </td>
+                </tr>
 
-        </table>
-        <br/>
-        <p>
-        <input type="submit" id="updateDialogOKButton" value="OK"/>
-        <input type="button" id="updateDialogCancelButton" value="Cancel" />
+            </table>
+            <br />
+            <p>
+                <input type="button" id="updatedDialogOKButton" value="OK" />
+                <input type="button" id="updatedDialogCancelButton" value="Cancel" />
             </p>
-    </form>
-
-
-</div>
-        </body>
-    </html>
+        </form>
+    </div>
+</body>
+</html>

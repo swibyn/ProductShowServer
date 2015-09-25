@@ -10,11 +10,18 @@ namespace Lmp.ProductShow.DAL
 {
     public class UserDAL
     {
-        ProductShowEntities dbModel = new ProductShowEntities();
-        
+        //Entities dbModel = new Entities();
+
+        private Entities dbModel
+        {
+            get
+            {
+                return DBModel.entities;
+            }
+        }
         public tblUser getUserByUserName(string userName)
         {
-            return dbModel.tblUsers.FirstOrDefault(o => o.username == userName);
+            return dbModel.tblUser.FirstOrDefault(o => o.username == userName);
             
         }
 
